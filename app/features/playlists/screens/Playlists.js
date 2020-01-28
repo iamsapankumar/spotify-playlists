@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import {
+  Image, StyleSheet,
+} from 'react-native';
+import Header from '../../../shared/Header/Header';
+
+const LOGO = require('../../../assets/spotify-playlists-logo.png');
 
 export default class Playlists extends Component {
   constructor(props) {
@@ -11,9 +16,16 @@ export default class Playlists extends Component {
 
   render() {
     return (
-      <View>
-        <Text> Playlists </Text>
-      </View>
+      <>
+        <Header center={<Image source={LOGO} style={styles.image} />} />
+      </>
     );
   }
 }
+const styles = StyleSheet.create({
+  image: {
+    height: 150,
+    width: 150,
+  },
+
+});

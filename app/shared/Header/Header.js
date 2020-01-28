@@ -1,12 +1,20 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { Text, View } from 'react-native';
+import { TouchableOpacity, SafeAreaView } from 'react-native';
+import styles from './styles';
 
 const Header = ({
-  params,
+  left, center, right, leftPress, rightPress,
 }) => (
-  <View>
-    <Text>Header</Text>
-  </View>
+  <SafeAreaView style={styles.container}>
+    <TouchableOpacity style={styles.left} onPress={leftPress}>
+      {left}
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.center}>{center}</TouchableOpacity>
+    <TouchableOpacity style={styles.right} onPress={rightPress}>
+      {right}
+    </TouchableOpacity>
+  </SafeAreaView>
 );
 
 export default Header;
