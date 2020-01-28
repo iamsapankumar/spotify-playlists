@@ -1,5 +1,3 @@
-import 'react-native-gesture-handler';
-
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -12,7 +10,7 @@ const App = createStackNavigator(
     Playlists: {
       screen: Playlists,
       navigationOptions: {
-        header: null,
+        headerShown: false,
       },
     },
     PlaylistDetail: {
@@ -28,11 +26,6 @@ const App = createStackNavigator(
       },
     },
   },
-  {
-    navigationOptions: {
-      header: null,
-    },
-  },
 );
 const Navigation = createSwitchNavigator(
   {
@@ -43,5 +36,4 @@ const Navigation = createSwitchNavigator(
   },
 );
 const AppContainer = createAppContainer(Navigation);
-
 export default AppContainer;
