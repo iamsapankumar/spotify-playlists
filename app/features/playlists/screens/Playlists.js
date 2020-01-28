@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import Header from '../../../shared/Header/Header';
 import Playlist from '../components/List/Playlist';
+import PlaylistContainer from '../containers/PlaylistContainer';
+import SpotifyContainer from '../containers/SpotifyContainer';
 
 
 const LOGO = require('../../../assets/spotify-playlists-logo.png');
@@ -25,7 +27,8 @@ export default class Playlists extends Component {
     return (
       <>
         <Header center={<Image source={LOGO} style={styles.image} />} />
-        <Playlist playlistData={[]} onPress={this.navigateToPlaylistDetail} />
+        <PlaylistContainer />
+        <SpotifyContainer />
       </>
     );
   }

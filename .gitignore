@@ -54,3 +54,6 @@ ios/Pods
 
 # Bundle artifact
 *.jsbundle
+app/config/config.js
+app/config/config.js
+app/config/spotify.config.js
