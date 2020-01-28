@@ -24,9 +24,11 @@ const Playlist = ({
       getItemLayout={getItemLayout}
       renderItem={(el) => (
         <PlaylistItem
+          source={el.item.images[0]?.url}
           keyExtractor={(item) => item.key}
-          playlistName={el.playlistName}
+          name={el.item.name}
           onPress={onPress}
+          songCount={el.item.tracks.total}
         />
       )}
     />

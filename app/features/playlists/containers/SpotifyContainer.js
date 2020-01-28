@@ -2,17 +2,18 @@
 /* eslint-disable react/sort-comp */
 import { Alert } from 'react-native';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AuthContext from '../../../core/auth/AuthContext';
 import SpotifyServices from '../../../core/playlists/services.js/SpotifyService';
-
+import Playlist from '../components/List/Playlist';
 
 class SpotifyContainerUnplugged extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      response: '',
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     loading: false,
+  //   };
+  // }
 
 
   onError(e) {
@@ -30,22 +31,41 @@ class SpotifyContainerUnplugged extends Component {
     });
   };
 
+  componentDidMount() {
+    this.props.fetchPlaylists();
+  }
 
   render() {
-    return <></>;
+    return (
+      <>
+        <Playlist playlistData={this.props.playlists} />
+      </>
+    );
   }
 }
 
 const SpotifyContainer = (props) => (
   <AuthContext.Consumer>
-    {({ authenticate, isAuthenticated }) => (
-      <SpotifyServices {...props} authenticate={authenticate} isAuthenticated={isAuthenticated}>
-        {() => (
-          <SpotifyContainerUnplugged />
+    {({ authenticate, isAuthenticated, rehydrated }) => (
+      <SpotifyServices
+        {...props}
+        authenticate={authenticate}
+        isAuthenticated={isAuthenticated}
+        rehydrated={rehydrated}
+      >
+        {({ fetchPlaylists, playlists }) => (
+          <SpotifyContainerUnplugged fetchPlaylists={fetchPlaylists} playlists={playlists} />
         )}
       </SpotifyServices>
-
     )}
   </AuthContext.Consumer>
 );
+SpotifyContainerUnplugged.propTypes = {
+  playlists: PropTypes.arrayOf(PropTypes.object),
+  fetchPlaylists: PropTypes.func,
+};
+SpotifyContainerUnplugged.defaultProps = {
+  playlists: [],
+  fetchPlaylists: PropTypes.func,
+};
 export default SpotifyContainer;

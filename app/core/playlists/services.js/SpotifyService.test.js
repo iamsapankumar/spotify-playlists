@@ -26,7 +26,7 @@ describe('SpotifyService', () => {
     });
   });
   describe('Fetches data', () => {
-    it('fetches data successfully from spotify endpoint', async () => {
+    it('fetches data successfully from auth endpoint', async () => {
       const wrapper = Enzyme.shallow(<SpotifyService />);
       const fetchAuthCode = wrapper.instance().getAuthorizationCode();
       const data = {
@@ -36,7 +36,7 @@ describe('SpotifyService', () => {
       // It can't be tested since it depends on the parameter user inputs on webview
       await expect(fetchAuthCode).resolves.toEqual(undefined);
     });
-    it('does not fetches data successfully from spotify endpoint', async () => {
+    it('does not fetches data successfully from auth endpoint', async () => {
       const error = 'error';
       axios.get.mockImplementationOnce(() => Promise.reject(new Error(error)));
     });

@@ -1,8 +1,10 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
+import { AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 import { AuthSession } from 'expo';
 import moment from 'moment';
+import Axios from 'axios';
 import * as Config from '../../../config/spotify.config';
 
 const noop = () => {};
@@ -15,6 +17,7 @@ export default class SpotifyServices extends Component {
       token: '',
       error: false,
       response: {},
+      playlists: [],
     };
   }
 
@@ -28,31 +31,49 @@ export default class SpotifyServices extends Component {
 
   getAuthorizationCode = async () => {
     const { authenticate } = this.props;
+    const authUrl = `${Config.spotifyUrl.base}authorize?client_id=${
+      Config.spotifyUrl.client_id
+    }&response_type=${
+      Config.spotifyUrl.response_type
+    }&redirect_uri=${encodeURIComponent(Config.spotifyUrl.redirect_uri)}&scope=user-read-private`;
+
     const result = await AuthSession.startAsync({
-      authUrl: `${Config.spotifyUrl.base}?client_id=${
-        Config.spotifyUrl.client_id
-      }&response_type=${
-        Config.spotifyUrl.response_type
-      }&redirect_uri=${encodeURIComponent(Config.spotifyUrl.redirect_uri)}`,
+      authUrl,
     });
     const token = result?.params?.access_token;
     const tokenDate = moment().format('X');
     if (token) return authenticate({ token, tokenDate });
-
     this.setState({ token });
 
     return token;
   };
 
 
+  fetchPlaylists = async () => {
+    const token = await AsyncStorage.getItem('token');
+    this.setState({ loading: true });
+    try {
+      const url = `${Config.spotifyUrl.playlists}?q=rap&&market=from_token&type=playlist`;
+      const results = await Axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      this.setState({ playlists: results?.data?.playlists?.items });
+    } catch (e) {
+      return e;
+    }
+    return true;
+  }
+
   render() {
     const { children } = this.props;
     const {
-      response, error, loading, token,
+      response, error, loading, token, playlists,
     } = this.state;
-
+    const { fetchPlaylists } = this;
     return children({
-      response, error, loading, token,
+      response, error, loading, token, fetchPlaylists, playlists,
     });
   }
 }
@@ -63,6 +84,7 @@ SpotifyServices.propTypes = {
   rehydrated: PropTypes.bool,
   isAuthenticated: PropTypes.bool,
 };
+
 SpotifyServices.defaultProps = {
   children: noop,
   authenticate: noop,

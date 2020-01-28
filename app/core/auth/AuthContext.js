@@ -9,5 +9,6 @@ export default React.createContext(
     currentUser: null,
     authenticate: noop,
     logout: noop,
+    rehydrated: false,
   },
 );

@@ -23,14 +23,15 @@ class AuthProvider extends React.Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     this.rehydrateAuthState();
   }
 
   rehydrateAuthState = async () => {
     const token = await AsyncStorage.getItem(AUTH_KEY);
     const tokenDate = await AsyncStorage.getItem(TOKEN_DATE);
-    this.isTokenValid(token, tokenDate);
+
+    this.isTokenValid({ token, tokenDate });
   }
 
   isTokenValid = ({ token, tokenDate }) => {
@@ -44,10 +45,11 @@ class AuthProvider extends React.Component {
 
     // Is the token out of date?
     const now = moment().format('X');
-    if ((tokenDate - now) < 3600) {
+    if ((now - tokenDate) > 3600) {
       this.setState({ isAuthenticated: false, rehydrated: true });
+    } else {
+      this.setState({ isAuthenticated: true, rehydrated: true });
     }
-    this.setState({ isAuthenticated: true });
     return true;
   }
 

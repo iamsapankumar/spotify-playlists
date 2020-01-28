@@ -9,15 +9,15 @@ import styles from './styles';
 const RIGHT_ICON = require('../../../../assets/right.png');
 
 const PlaylistItem = ({
-  source, playlistName, songCount, onPress,
+  source, name, songCount, onPress,
 }) => (
   <>
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.imageContainer}>
-        <Image source={source} style={styles.image} resizeMode="contain" />
+        <Image source={{ uri: source || '' }} style={styles.image} resizeMode="contain" />
       </View>
       <View style={styles.textContainer}>
-        <Text>{playlistName}</Text>
+        <Text>{name}</Text>
         <Text style={styles.text}>
           songs:
           {' '}
@@ -33,14 +33,14 @@ const PlaylistItem = ({
 
 PlaylistItem.propTypes = {
   source: PropTypes.any,
-  playlistName: PropTypes.string,
+  name: PropTypes.string,
   songCount: PropTypes.number,
   onPress: PropTypes.func,
 };
 
 PlaylistItem.defaultProps = {
   source: 0,
-  playlistName: '',
+  name: '',
   songCount: 0,
   onPress: noop,
 };
