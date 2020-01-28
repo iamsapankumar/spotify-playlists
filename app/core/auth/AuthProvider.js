@@ -4,9 +4,11 @@ import React from 'react';
 import { AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 import { noop } from '@babel/types';
+import moment from 'moment';
 import AuthContext from './AuthContext';
 
 export const AUTH_KEY = 'token';
+export const TOKEN_DATE = 'token_date';
 
 class AuthProvider extends React.Component {
   constructor(props) {
@@ -14,23 +16,53 @@ class AuthProvider extends React.Component {
     this.state = {
       resolved: false,
       token: '',
+      tokenDate: '',
       currentUser: null,
       isAuthenticated: false,
+      rehydrated: false,
     };
   }
 
+  componentDidMount = () => {
+    this.rehydrateAuthState();
+  }
+
+  rehydrateAuthState = async () => {
+    const token = await AsyncStorage.getItem(AUTH_KEY);
+    const tokenDate = await AsyncStorage.getItem(TOKEN_DATE);
+    this.isTokenValid(token, tokenDate);
+  }
+
+  isTokenValid = ({ token, tokenDate }) => {
+    if (undefined === token) {
+      return false;
+    }
+    // Do we have a token?
+    if (token === '' || tokenDate === '') {
+      return false;
+    }
+
+    // Is the token out of date?
+    const now = moment().format('X');
+    if ((tokenDate - now) < 3600) {
+      this.setState({ isAuthenticated: false, rehydrated: true });
+    }
+    this.setState({ isAuthenticated: true });
+    return true;
+  }
 
   /**
    * Authenticate and persist it on AsyncStorage
    */
-  authenticate = async ({ token = '' }) => {
+  authenticate = async ({ token = '', tokenDate = '' }) => {
     this.setState({
       token,
+      tokenDate,
       resolved: true,
       isAuthenticated: true,
     });
     await AsyncStorage.setItem(AUTH_KEY, token);
-
+    await AsyncStorage.setItem(TOKEN_DATE, tokenDate);
     return true;
   };
 

@@ -38,11 +38,12 @@
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "jest": "~24.9.0",
+    "jest-expo": "^36.0.1",
     "metro-react-native-babel-preset": "~0.56.0",
     "react-test-renderer": "~16.9.0"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "jest-expo",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -52,7 +53,7 @@
       "node"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|@?react-navigation)"
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base)"
     ],
     "setupFiles": [
       "./jest/setup.js",

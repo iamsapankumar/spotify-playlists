@@ -38,8 +38,8 @@ class SpotifyContainerUnplugged extends Component {
 
 const SpotifyContainer = (props) => (
   <AuthContext.Consumer>
-    {({ authenticate }) => (
-      <SpotifyServices {...props} authenticate={authenticate}>
+    {({ authenticate, isAuthenticated }) => (
+      <SpotifyServices {...props} authenticate={authenticate} isAuthenticated={isAuthenticated}>
         {() => (
           <SpotifyContainerUnplugged />
         )}

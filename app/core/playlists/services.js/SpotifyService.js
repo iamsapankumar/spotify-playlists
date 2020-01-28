@@ -2,16 +2,12 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AuthSession } from 'expo';
+import moment from 'moment';
 import * as Config from '../../../config/spotify.config';
 
 const noop = () => {};
 
 export default class SpotifyServices extends Component {
-  static defaultProps = {
-    url: '',
-    onError: noop,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -22,8 +18,11 @@ export default class SpotifyServices extends Component {
     };
   }
 
-  componentDidMount = () => {
-    this.getAuthorizationCode();
+  componentDidUpdate = (prevProps) => {
+    const { isAuthenticated, rehydrated } = this.props;
+    if (prevProps.rehydrated !== rehydrated && !isAuthenticated && rehydrated) {
+      this.getAuthorizationCode();
+    }
   }
 
 
@@ -37,10 +36,10 @@ export default class SpotifyServices extends Component {
       }&redirect_uri=${encodeURIComponent(Config.spotifyUrl.redirect_uri)}`,
     });
     const token = result?.params?.access_token;
+    const tokenDate = moment().format('X');
+    if (token) return authenticate({ token, tokenDate });
 
-    authenticate({ token });
-
-    await this.setState({ token });
+    this.setState({ token });
 
     return token;
   };
@@ -59,14 +58,14 @@ export default class SpotifyServices extends Component {
 }
 
 SpotifyServices.propTypes = {
-  url: PropTypes.string,
-  onError: PropTypes.func,
   children: PropTypes.func,
   authenticate: PropTypes.func,
+  rehydrated: PropTypes.bool,
+  isAuthenticated: PropTypes.bool,
 };
 SpotifyServices.defaultProps = {
-  url: '',
-  onError: noop,
   children: noop,
   authenticate: noop,
+  rehydrated: false,
+  isAuthenticated: false,
 };
