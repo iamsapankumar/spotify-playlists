@@ -4,11 +4,6 @@ import PropTypes from 'prop-types';
 import { noop } from '@babel/types';
 import PlaylistDetailItem from '../ListItem/PlaylistDetailItem';
 
-const getItemLayout = (data, index) => ({
-  length: 30,
-  offset: 44 * index,
-  index,
-});
 const PlayListDetail = ({
   onPress, tracks,
 }) => (
@@ -16,16 +11,16 @@ const PlayListDetail = ({
     <FlatList
       removeClippedSubviews
       data={tracks}
-      style={{}}
+      style={{ flex: 1 }}
       maxToRenderPerBatch={10}
-      updateCellsBatchingPeriod={20}
+      // updateCellsBatchingPeriod={20}
       initialNumToRender={5}
       keyExtractor={(item, index) => index.toString()}
       windowSize={10}
-      getItemLayout={getItemLayout}
+
       renderItem={(el) => (
         <PlaylistDetailItem
-          name={el.item.track.name}
+          name={el?.item?.track?.name || ''}
           source={el?.item?.track?.album?.images[0].url}
           artists={el?.item?.track?.artists}
           onPress={() => onPress(el.item)}

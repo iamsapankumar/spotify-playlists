@@ -3,12 +3,12 @@
   "displayName": "Spotify Playlists",
   "expo": {
     "name": "spotifyPlaylists",
-    "slug": "expo-template-bare",
+    "slug": "spotifyplaylists",
     "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "version": "1.0.0",
     "entryPoint": "node_modules/expo/AppEntry.js",
-    "scheme": "https://auth.expo.io/@barakao/expo-template-bare",
+    "scheme": "spotifyplaylists",
     "platforms": [
       "ios",
       "android",

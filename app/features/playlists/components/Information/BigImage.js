@@ -12,7 +12,7 @@ const BigImage = ({ source }) => (
 
 const styles = StyleSheet.create({
   container: {
-    height: 300,
+    height: 250,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 20,

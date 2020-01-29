@@ -15,7 +15,7 @@ const PlaylistDetailItem = ({
   const formattedArtists = artists.map((el) => ` ${el.name}`).toString();
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={onPress}>
+      <TouchableOpacity style={styles.songsContainer} onPress={onPress}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: source || '' }} style={styles.rooundImage} resizeMode="contain" />
         </View>

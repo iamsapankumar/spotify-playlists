@@ -4,8 +4,7 @@
 <dict>
 	<key>LSApplicationQueriesSchemes</key>
 		<array>
-			<string>spotify</string>
-			<string>playlists</string>
+    <string>https://auth.expo.io/@barakao/spotifyplaylists</string>
 		</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>

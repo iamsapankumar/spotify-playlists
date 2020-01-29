@@ -61,17 +61,17 @@ const SongInformation = ({
   );
 };
 SongInformation.propTypes = {
-  duration: PropTypes.string,
-  artists: PropTypes.string,
+  duration: PropTypes.number,
+  artists: PropTypes.array,
   onPress: PropTypes.string,
-  popularity: PropTypes.string,
+  popularity: PropTypes.number,
 
 };
 SongInformation.defaultProps = {
-  duration: '',
-  artists: '',
+  duration: 0,
+  artists: [],
   onPress: '',
-  popularity: '',
+  popularity: 0,
 };
 const styles = StyleSheet.create({
   container: {

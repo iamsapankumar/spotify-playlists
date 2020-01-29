@@ -21,7 +21,7 @@ const Playlist = ({
       initialNumToRender={5}
       keyExtractor={(item, index) => index.toString()}
       windowSize={10}
-      getItemLayout={getItemLayout}
+      // getItemLayout={getItemLayout}
       renderItem={(el) => (
         <PlaylistItem
           source={el.item.images[0]?.url}

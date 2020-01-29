@@ -1,8 +1,9 @@
 import {
-  StyleSheet,
+  StyleSheet, Dimensions,
 } from 'react-native';
 import * as Vars from 'shared/Vars/Vars';
 
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     height: 45,
@@ -23,6 +24,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     paddingLeft: 20,
+  },
+  shadow: {
+    shadowOffset: { height: 2 },
+    backgroundColor: 'white',
+    opacity: 0.07,
+    alignSelf: 'center',
+    shadowRadius: 5,
+    shadowColor: 'black',
+    shadowOpacity: 1,
+    bottom: -13,
+    right: 0,
+    height: 5,
+    width,
+    position: 'absolute',
   },
 });
 export default styles;

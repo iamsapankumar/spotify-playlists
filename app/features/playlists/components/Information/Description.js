@@ -1,17 +1,19 @@
 import React from 'react';
 import {
-  StyleSheet, View, Text,
+  StyleSheet, View, Text, Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import * as Vars from '../../../../shared/Vars/Vars';
+
+const { width } = Dimensions.get('window');
 
 const Description = ({
   description, title,
 }) => (
   <View style={styles.container}>
     <View style={styles.shadow} />
-    <Text style={styles.titleText}>{title}</Text>
-    <Text style={styles.descriptionText}>{description}</Text>
+    <Text style={styles.titleText} numberOfLines={1}>{title}</Text>
+    <Text style={styles.descriptionText} numberOfLines={2}>{description}</Text>
   </View>
 );
 Description.propTypes = {
@@ -29,6 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   shadow: {
     shadowOffset: { height: 2 },
@@ -40,8 +43,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     bottom: 0,
     left: 0,
-    height: 10,
-    width: '100%',
+    height: 5,
+    width,
     position: 'absolute',
   },
   titleText: {
