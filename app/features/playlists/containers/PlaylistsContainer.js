@@ -1,53 +1,31 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable react/sort-comp */
-import { Alert } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNavigation } from 'react-navigation';
 import AuthContext from '../../../core/auth/AuthContext';
 import SpotifyServices from '../../../core/playlists/services.js/SpotifyService';
 import Playlist from '../components/List/Playlist';
+import * as Vars from '../../../shared/Vars/Vars';
 
 class SpotifyContainerUnplugged extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     loading: false,
-  //   };
-  // }
-
-
-  onError(e) {
-    this.ErrorAlert('Something went wrong', e);
-    return true;
-  }
-
-  /**
-   * Error alert component
-   * @param {string} message
-   */
-  ErrorAlert = (message, text = 'Try again', title = 'OOPS...') => {
-    Alert.alert(title, message, [{ text, onPress: () => {} }], {
-      cancelable: false,
-    });
-  };
-
   componentDidUpdate(prevProps) {
-    console.log(prevProps, this.props);
-    if (prevProps.isAuthenticated !== this.props.isAuthenticated && this.props.isAuthenticated && this.props.rehydrated) {
+    const { isAuthenticated, rehydrated } = this.props;
+    if (prevProps.isAuthenticated !== isAuthenticated && isAuthenticated && rehydrated) {
       this.props.fetchPlaylists();
     }
   }
 
   navigateToPlaylistDetail = (details) => {
     const { navigation } = this.props;
-    navigation.navigate('PlaylistDetail', details);
+    return navigation.navigate('PlaylistDetail', details);
   }
 
   render() {
-    const { playlists } = this.props;
+    const { playlists, loading } = this.props;
     return (
       <>
+        {loading && <ActivityIndicator color={Vars.themeColors.main} size="large" style={{ paddingTop: 30 }} />}
         <Playlist playlistData={playlists} onPress={this.navigateToPlaylistDetail} />
       </>
     );
@@ -63,13 +41,18 @@ const SpotifyContainer = (props) => (
         isAuthenticated={isAuthenticated}
         rehydrated={rehydrated}
       >
-        {({ fetchPlaylists, playlists, token }) => (
+        {({
+          fetchPlaylists, playlists, token, loading, error,
+        }) => (
           <SpotifyContainerUnplugged
             fetchPlaylists={fetchPlaylists}
             playlists={playlists}
             isAuthenticated={isAuthenticated}
             rehydrated={rehydrated}
             token={token}
+            loading={loading}
+            error={error}
+            {...props}
           />
         )}
       </SpotifyServices>
@@ -80,10 +63,17 @@ SpotifyContainerUnplugged.propTypes = {
   playlists: PropTypes.arrayOf(PropTypes.object),
   fetchPlaylists: PropTypes.func,
   navigation: PropTypes.object,
+  loading: PropTypes.bool,
+  isAuthenticated: PropTypes.bool,
+  rehydrated: PropTypes.bool,
 };
 SpotifyContainerUnplugged.defaultProps = {
   playlists: [],
   fetchPlaylists: () => {},
   navigation: {},
+  loading: true,
+  isAuthenticated: false,
+  rehydrated: false,
 };
-export default withNavigation(SpotifyContainer);
+
+export default SpotifyContainer;

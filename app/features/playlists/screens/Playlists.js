@@ -4,10 +4,7 @@ import {
   Image, StyleSheet,
 } from 'react-native';
 import Header from '../../../shared/Header/Header';
-
-
-import PlaylistsContainer from '../containers/SpotifyContainer';
-
+import PlaylistsContainer from '../containers/PlaylistsContainer';
 
 const LOGO = require('../../../assets/spotify-playlists-logo.png');
 
@@ -27,7 +24,7 @@ export default class Playlists extends Component {
     return (
       <>
         <Header center={<Image source={LOGO} style={styles.image} />} />
-        <PlaylistsContainer />
+        <PlaylistsContainer {...this.props} />
       </>
     );
   }

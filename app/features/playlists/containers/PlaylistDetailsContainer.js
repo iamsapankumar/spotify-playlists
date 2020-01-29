@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable react/sort-comp */
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNavigation } from 'react-navigation';
@@ -11,21 +11,6 @@ import Description from '../components/Information/Description';
 import PlayListDetail from '../components/List/PlaylistDetail';
 
 class PlaylistDetailContainerUnplugged extends Component {
-  onError(e) {
-    this.ErrorAlert('Something went wrong', e);
-    return true;
-  }
-
-  /**
-   * Error alert component
-   * @param {string} message
-   */
-  ErrorAlert = (message, text = 'Try again', title = 'OOPS...') => {
-    Alert.alert(title, message, [{ text, onPress: () => {} }], {
-      cancelable: false,
-    });
-  };
-
   componentDidMount() {
     const { navigation, fetchPlaylistDetails } = this.props;
     fetchPlaylistDetails(navigation.state.params.id);
@@ -40,16 +25,14 @@ class PlaylistDetailContainerUnplugged extends Component {
     const { playlistDetail } = this.props;
     const image = playlistDetail?.images?.slice(0);
     return (
-      <>
-        <View style={{ flex: 1 }}>
-          <BigImage source={image ? image[0].url : ''} />
-          <Description title={playlistDetail?.name} description={playlistDetail?.description} />
-          <PlayListDetail
-            tracks={playlistDetail?.tracks?.items}
-            onPress={this.navigateToSongDetails}
-          />
-        </View>
-      </>
+      <View style={{ flex: 1 }}>
+        <BigImage source={image ? image[0].url : ''} />
+        <Description title={playlistDetail?.name} description={playlistDetail?.description} />
+        <PlayListDetail
+          tracks={playlistDetail?.tracks?.items}
+          onPress={this.navigateToSongDetails}
+        />
+      </View>
     );
   }
 }

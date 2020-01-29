@@ -3,7 +3,6 @@
 import React from 'react';
 import { AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
-import { noop } from '@babel/types';
 import moment from 'moment';
 import AuthContext from './AuthContext';
 

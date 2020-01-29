@@ -23,19 +23,18 @@ export default class SpotifyServices extends Component {
     };
   }
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = async (prevProps) => {
     const { isAuthenticated, rehydrated } = this.props;
     if (prevProps.rehydrated !== rehydrated && !isAuthenticated && rehydrated) {
-      this.getAuthorizationCode();
-    }
-    if (prevProps.rehydrated !== rehydrated && isAuthenticated && rehydrated) {
-      this.fetchPlaylists();
+      await this.getAuthorizationCode();
+      await this.fetchPlaylists();
     }
   }
 
 
   getAuthorizationCode = async () => {
     const { authenticate } = this.props;
+    this.setState({ loading: true });
     const authUrl = `${Config.spotifyUrl.base}authorize?client_id=${
       Config.spotifyUrl.client_id
     }&response_type=${
@@ -53,9 +52,7 @@ export default class SpotifyServices extends Component {
     return token;
   };
 
-
   fetchPlaylists = async () => {
-    console.log('calling fetch PLS');
     const token = await AsyncStorage.getItem('token');
     this.setState({ loading: true });
     try {
@@ -65,9 +62,9 @@ export default class SpotifyServices extends Component {
           Authorization: `Bearer ${token}`,
         },
       });
-      this.setState({ playlists: results?.data?.playlists?.items });
+      this.setState({ playlists: results?.data?.playlists?.items, loading: false });
     } catch (e) {
-      console.log(e);
+      this.setState({ error: e, loading: false });
       return e;
     }
     return true;
@@ -85,13 +82,13 @@ export default class SpotifyServices extends Component {
       });
       this.setState({ playlistDetail: results.data, loading: false });
     } catch (e) {
+      this.setState({ error: e, loading: false });
       return e;
     }
     return true;
   }
 
   fetchSongDetails = async (trackId) => {
-    console.log('CALLED', trackId);
     const token = await AsyncStorage.getItem('token');
     this.setState({ loading: true });
     try {
@@ -101,7 +98,6 @@ export default class SpotifyServices extends Component {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(results.data);
       this.setState({ songDetails: results.data, loading: false });
     } catch (e) {
       return e;

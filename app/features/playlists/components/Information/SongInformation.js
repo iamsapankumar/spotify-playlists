@@ -28,7 +28,7 @@ const SongInformation = ({
           <Text style={styles.textTitle}>
             Artist:
             {'\n'}
-            {artists?.map((el) => (
+            {artists && artists.map((el) => (
               <Text style={[styles.textTitle, { color: 'black' }]}>
                 {el.name}
                 {' '}

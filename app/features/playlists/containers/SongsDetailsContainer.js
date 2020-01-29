@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable react/sort-comp */
-import { Alert, View, Linking } from 'react-native';
+import { View, Linking } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNavigation } from 'react-navigation';
@@ -11,21 +11,6 @@ import Description from '../components/Information/Description';
 import SongDetails from '../components/Information/SongInformation';
 
 class SongsDetailsContainerUnplugged extends Component {
-  onError(e) {
-    this.ErrorAlert('Something went wrong', e);
-    return true;
-  }
-
-  /**
-   * Error alert component
-   * @param {string} message
-   */
-  ErrorAlert = (message, text = 'Try again', title = 'OOPS...') => {
-    Alert.alert(title, message, [{ text, onPress: () => {} }], {
-      cancelable: false,
-    });
-  };
-
   componentDidMount() {
     const { navigation, fetchSongDetails } = this.props;
     fetchSongDetails(navigation.state.params.track.id);
