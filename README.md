@@ -1,12 +1,12 @@
 # spotify-playlists
 app for searching through playlists in your country
-Showcase:
-https://youtu.be/txeFkeDI8X0
+# Showcase:
+ https://youtu.be/txeFkeDI8X0
 
-Display link:
+# Display link:
 https://exp.host/@barakao/spotifyplaylists
 
-To run dev mode:
+# To run dev mode:
 
 `git clone`
 `cd repo`
