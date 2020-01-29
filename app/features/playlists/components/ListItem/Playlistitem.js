@@ -3,7 +3,6 @@ import {
   Text, View, Image, TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { noop } from '@babel/types';
 import styles from './styles';
 
 const RIGHT_ICON = require('../../../../assets/right.png');
@@ -42,7 +41,7 @@ PlaylistItem.defaultProps = {
   source: 0,
   name: '',
   songCount: 0,
-  onPress: noop,
+  onPress: () => {},
 };
 
 export default PlaylistItem;

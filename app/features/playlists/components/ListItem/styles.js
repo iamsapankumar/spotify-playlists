@@ -9,6 +9,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
   },
+  songsContainer: {
+    height: 100,
+    width: '100%',
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
   imageContainer: {
     flex: 1.5,
     alignItems: 'center',
@@ -16,6 +22,11 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 2,
+    justifyContent: 'center',
+    paddingLeft: 10,
+  },
+  artistsContainer: {
+    flex: 1,
     justifyContent: 'center',
     paddingLeft: 10,
   },
@@ -27,6 +38,11 @@ const styles = StyleSheet.create({
   image: {
     height: width / 4,
     width: width / 4,
+  },
+  rooundImage: {
+    height: width / 4,
+    width: width / 4,
+    borderRadius: width / 2,
   },
   rightIcon: {
     height: 20,

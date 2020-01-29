@@ -3,6 +3,7 @@
 import { Alert } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withNavigation } from 'react-navigation';
 import AuthContext from '../../../core/auth/AuthContext';
 import SpotifyServices from '../../../core/playlists/services.js/SpotifyService';
 import Playlist from '../components/List/Playlist';
@@ -35,10 +36,16 @@ class SpotifyContainerUnplugged extends Component {
     this.props.fetchPlaylists();
   }
 
+  navigateToPlaylistDetail = (details) => {
+    const { navigation } = this.props;
+    navigation.navigate('PlaylistDetail', details);
+  }
+
   render() {
+    const { playlists } = this.props;
     return (
       <>
-        <Playlist playlistData={this.props.playlists} />
+        <Playlist playlistData={playlists} onPress={this.navigateToPlaylistDetail} />
       </>
     );
   }
@@ -54,7 +61,7 @@ const SpotifyContainer = (props) => (
         rehydrated={rehydrated}
       >
         {({ fetchPlaylists, playlists }) => (
-          <SpotifyContainerUnplugged fetchPlaylists={fetchPlaylists} playlists={playlists} />
+          <SpotifyContainerUnplugged fetchPlaylists={fetchPlaylists} playlists={playlists} {...props} />
         )}
       </SpotifyServices>
     )}
@@ -63,9 +70,11 @@ const SpotifyContainer = (props) => (
 SpotifyContainerUnplugged.propTypes = {
   playlists: PropTypes.arrayOf(PropTypes.object),
   fetchPlaylists: PropTypes.func,
+  navigation: PropTypes.object,
 };
 SpotifyContainerUnplugged.defaultProps = {
   playlists: [],
-  fetchPlaylists: PropTypes.func,
+  fetchPlaylists: () => {},
+  navigation: {},
 };
-export default SpotifyContainer;
+export default withNavigation(SpotifyContainer);

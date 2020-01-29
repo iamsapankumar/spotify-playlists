@@ -18,6 +18,7 @@ export default class SpotifyServices extends Component {
       error: false,
       response: {},
       playlists: [],
+      playlistDetail: {},
     };
   }
 
@@ -53,7 +54,7 @@ export default class SpotifyServices extends Component {
     const token = await AsyncStorage.getItem('token');
     this.setState({ loading: true });
     try {
-      const url = `${Config.spotifyUrl.playlists}?q=rap&&market=from_token&type=playlist`;
+      const url = `${Config.spotifyUrl.playlists}v1/search?q=rap&&market=from_token&type=playlist`;
       const results = await Axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -66,14 +67,38 @@ export default class SpotifyServices extends Component {
     return true;
   }
 
+  fetchPlaylistDetails = async (playlistId) => {
+    const token = await AsyncStorage.getItem('token');
+    this.setState({ loading: true });
+    try {
+      const url = `${Config.spotifyUrl.playlists}v1/playlists/${playlistId}`;
+      const results = await Axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      this.setState({ playlistDetail: results.data, loading: false });
+    } catch (e) {
+      return e;
+    }
+    return true;
+  }
+
   render() {
     const { children } = this.props;
     const {
-      response, error, loading, token, playlists,
+      response, error, loading, token, playlists, playlistDetail,
     } = this.state;
-    const { fetchPlaylists } = this;
+    const { fetchPlaylists, fetchPlaylistDetails } = this;
     return children({
-      response, error, loading, token, fetchPlaylists, playlists,
+      response,
+      error,
+      loading,
+      token,
+      fetchPlaylists,
+      playlists,
+      fetchPlaylistDetails,
+      playlistDetail,
     });
   }
 }

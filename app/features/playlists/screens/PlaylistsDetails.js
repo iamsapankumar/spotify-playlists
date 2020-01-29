@@ -1,7 +1,15 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import {
+  Image, StyleSheet,
+} from 'react-native';
+import Header from '../../../shared/Header/Header';
+import PlaylistDetailContainer from '../containers/PlaylistDetailsContainer';
 
-export default class PlaylistsDetails extends Component {
+
+const LOGO = require('../../../assets/spotify-playlists-logo.png');
+
+export default class PlaylistDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,9 +18,16 @@ export default class PlaylistsDetails extends Component {
 
   render() {
     return (
-      <View>
-        <Text> PlaylistsDetails </Text>
-      </View>
+      <>
+        <Header center={<Image source={LOGO} style={styles.image} />} />
+        <PlaylistDetailContainer {...this.props} />
+      </>
     );
   }
 }
+const styles = StyleSheet.create({
+  image: {
+    height: 150,
+    width: 150,
+  },
+});

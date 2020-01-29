@@ -2,20 +2,21 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { noop } from '@babel/types';
-import PlaylistItem from '../ListItem/Playlistitem';
+import PlaylistDetailItem from '../ListItem/PlaylistDetailItem';
 
 const getItemLayout = (data, index) => ({
   length: 30,
   offset: 44 * index,
   index,
 });
-const Playlist = ({
-  onPress, playlistData = [],
+const PlayListDetail = ({
+  onPress, tracks,
 }) => (
   <>
     <FlatList
       removeClippedSubviews
-      data={playlistData}
+      data={tracks}
+      style={{}}
       maxToRenderPerBatch={10}
       updateCellsBatchingPeriod={20}
       initialNumToRender={5}
@@ -23,28 +24,24 @@ const Playlist = ({
       windowSize={10}
       getItemLayout={getItemLayout}
       renderItem={(el) => (
-        <PlaylistItem
-          source={el.item.images[0]?.url}
-          keyExtractor={(item) => item.key}
-          name={el.item.name}
-          onPress={() => {
-            onPress(el.item);
-          }}
-          songCount={el.item.tracks.total}
+        <PlaylistDetailItem
+          name={el.item.track.name}
+          source={el?.item?.track?.album?.images[0].url}
+          artists={el?.item?.track?.artists}
+          onPress={() => onPress(el.item)}
         />
       )}
     />
-
   </>
 );
 
-Playlist.propTypes = {
+PlayListDetail.propTypes = {
   onPress: PropTypes.func,
-  playlistData: PropTypes.array,
+  tracks: PropTypes.array,
 };
-Playlist.defaultProps = {
+PlayListDetail.defaultProps = {
   onPress: noop,
-  playlistData: [],
+  tracks: [],
 };
 
-export default Playlist;
+export default PlayListDetail;
