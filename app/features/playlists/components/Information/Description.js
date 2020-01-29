@@ -2,16 +2,27 @@ import React from 'react';
 import {
   StyleSheet, View, Text,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import * as Vars from '../../../../shared/Vars/Vars';
 
-const Description = ({ source, description, title }) => (
+const Description = ({
+  description, title,
+}) => (
   <View style={styles.container}>
     <View style={styles.shadow} />
     <Text style={styles.titleText}>{title}</Text>
     <Text style={styles.descriptionText}>{description}</Text>
   </View>
 );
+Description.propTypes = {
+  description: PropTypes.string,
+  title: PropTypes.string,
 
+};
+Description.defaultProps = {
+  description: '',
+  title: '',
+};
 const styles = StyleSheet.create({
   container: {
     height: 90,
@@ -38,7 +49,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   descriptionText: {
-    color: Vars.themeColors.main,
     margin: 10,
     textAlign: 'center',
   },

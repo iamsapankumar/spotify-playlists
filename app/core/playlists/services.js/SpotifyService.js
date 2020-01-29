@@ -19,6 +19,7 @@ export default class SpotifyServices extends Component {
       response: {},
       playlists: [],
       playlistDetail: {},
+      songDetails: {},
     };
   }
 
@@ -26,6 +27,9 @@ export default class SpotifyServices extends Component {
     const { isAuthenticated, rehydrated } = this.props;
     if (prevProps.rehydrated !== rehydrated && !isAuthenticated && rehydrated) {
       this.getAuthorizationCode();
+    }
+    if (prevProps.rehydrated !== rehydrated && isAuthenticated && rehydrated) {
+      this.fetchPlaylists();
     }
   }
 
@@ -51,6 +55,7 @@ export default class SpotifyServices extends Component {
 
 
   fetchPlaylists = async () => {
+    console.log('calling fetch PLS');
     const token = await AsyncStorage.getItem('token');
     this.setState({ loading: true });
     try {
@@ -62,6 +67,7 @@ export default class SpotifyServices extends Component {
       });
       this.setState({ playlists: results?.data?.playlists?.items });
     } catch (e) {
+      console.log(e);
       return e;
     }
     return true;
@@ -84,12 +90,31 @@ export default class SpotifyServices extends Component {
     return true;
   }
 
+  fetchSongDetails = async (trackId) => {
+    console.log('CALLED', trackId);
+    const token = await AsyncStorage.getItem('token');
+    this.setState({ loading: true });
+    try {
+      const url = `${Config.spotifyUrl.playlists}v1/tracks/${trackId}`;
+      const results = await Axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(results.data);
+      this.setState({ songDetails: results.data, loading: false });
+    } catch (e) {
+      return e;
+    }
+    return true;
+  }
+
   render() {
     const { children } = this.props;
     const {
-      response, error, loading, token, playlists, playlistDetail,
+      response, error, loading, token, playlists, playlistDetail, songDetails,
     } = this.state;
-    const { fetchPlaylists, fetchPlaylistDetails } = this;
+    const { fetchPlaylists, fetchPlaylistDetails, fetchSongDetails } = this;
     return children({
       response,
       error,
@@ -99,6 +124,8 @@ export default class SpotifyServices extends Component {
       playlists,
       fetchPlaylistDetails,
       playlistDetail,
+      fetchSongDetails,
+      songDetails,
     });
   }
 }

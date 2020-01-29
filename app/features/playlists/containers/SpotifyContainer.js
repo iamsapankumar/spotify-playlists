@@ -32,8 +32,11 @@ class SpotifyContainerUnplugged extends Component {
     });
   };
 
-  componentDidMount() {
-    this.props.fetchPlaylists();
+  componentDidUpdate(prevProps) {
+    console.log(prevProps, this.props);
+    if (prevProps.isAuthenticated !== this.props.isAuthenticated && this.props.isAuthenticated && this.props.rehydrated) {
+      this.props.fetchPlaylists();
+    }
   }
 
   navigateToPlaylistDetail = (details) => {
@@ -60,8 +63,14 @@ const SpotifyContainer = (props) => (
         isAuthenticated={isAuthenticated}
         rehydrated={rehydrated}
       >
-        {({ fetchPlaylists, playlists }) => (
-          <SpotifyContainerUnplugged fetchPlaylists={fetchPlaylists} playlists={playlists} {...props} />
+        {({ fetchPlaylists, playlists, token }) => (
+          <SpotifyContainerUnplugged
+            fetchPlaylists={fetchPlaylists}
+            playlists={playlists}
+            isAuthenticated={isAuthenticated}
+            rehydrated={rehydrated}
+            token={token}
+          />
         )}
       </SpotifyServices>
     )}

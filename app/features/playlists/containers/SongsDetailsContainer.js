@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable react/sort-comp */
-import { Alert, View } from 'react-native';
+import { Alert, View, Linking } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNavigation } from 'react-navigation';
@@ -8,9 +8,9 @@ import AuthContext from '../../../core/auth/AuthContext';
 import SpotifyServices from '../../../core/playlists/services.js/SpotifyService';
 import BigImage from '../components/Information/BigImage';
 import Description from '../components/Information/Description';
-import PlayListDetail from '../components/List/PlaylistDetail';
+import SongDetails from '../components/Information/SongInformation';
 
-class PlaylistDetailContainerUnplugged extends Component {
+class SongsDetailsContainerUnplugged extends Component {
   onError(e) {
     this.ErrorAlert('Something went wrong', e);
     return true;
@@ -27,8 +27,8 @@ class PlaylistDetailContainerUnplugged extends Component {
   };
 
   componentDidMount() {
-    const { navigation, fetchPlaylistDetails } = this.props;
-    fetchPlaylistDetails(navigation.state.params.id);
+    const { navigation, fetchSongDetails } = this.props;
+    fetchSongDetails(navigation.state.params.track.id);
   }
 
   navigateToSongDetails = (details) => {
@@ -36,17 +36,24 @@ class PlaylistDetailContainerUnplugged extends Component {
     return navigation.navigate('SongDetail', details);
   }
 
+  listenOnSpotify = () => {
+    const { songDetails } = this.props;
+    Linking.openURL(songDetails.album.external_urls.spotify);
+  }
+
   render() {
-    const { playlistDetail } = this.props;
-    const image = playlistDetail?.images?.slice(0);
+    const { songDetails } = this.props;
+    const image = songDetails?.album?.images?.slice(0);
     return (
       <>
         <View style={{ flex: 1 }}>
           <BigImage source={image ? image[0].url : ''} />
-          <Description title={playlistDetail?.name} description={playlistDetail?.description} />
-          <PlayListDetail
-            tracks={playlistDetail?.tracks?.items}
-            onPress={this.navigateToSongDetails}
+          <Description title={songDetails?.name} description={songDetails?.album?.name} black />
+          <SongDetails
+            duration={songDetails.duration_ms}
+            artists={songDetails.artists}
+            popularity={songDetails.popularity}
+            onPress={this.listenOnSpotify}
           />
         </View>
       </>
@@ -54,7 +61,7 @@ class PlaylistDetailContainerUnplugged extends Component {
   }
 }
 
-const PlaylistDetailContainer = (props) => (
+const SongsDetailsContainer = (props) => (
   <AuthContext.Consumer>
     {({ authenticate, isAuthenticated, rehydrated }) => (
       <SpotifyServices
@@ -63,10 +70,10 @@ const PlaylistDetailContainer = (props) => (
         isAuthenticated={isAuthenticated}
         rehydrated={rehydrated}
       >
-        {({ fetchPlaylistDetails, playlistDetail }) => (
-          <PlaylistDetailContainerUnplugged
-            fetchPlaylistDetails={fetchPlaylistDetails}
-            playlistDetail={playlistDetail}
+        {({ fetchSongDetails, songDetails }) => (
+          <SongsDetailsContainerUnplugged
+            songDetails={songDetails}
+            fetchSongDetails={fetchSongDetails}
             {...props}
           />
         )}
@@ -74,14 +81,14 @@ const PlaylistDetailContainer = (props) => (
     )}
   </AuthContext.Consumer>
 );
-PlaylistDetailContainerUnplugged.propTypes = {
+SongsDetailsContainerUnplugged.propTypes = {
   navigation: PropTypes.object,
-  fetchPlaylistDetails: PropTypes.func,
-  playlistDetail: PropTypes.object,
+  fetchSongDetails: PropTypes.func,
+  songDetails: PropTypes.object,
 };
-PlaylistDetailContainerUnplugged.defaultProps = {
+SongsDetailsContainerUnplugged.defaultProps = {
   navigation: {},
-  fetchPlaylistDetails: () => {},
-  playlistDetail: {},
+  fetchSongDetails: () => {},
+  songDetails: {},
 };
-export default withNavigation(PlaylistDetailContainer);
+export default withNavigation(SongsDetailsContainer);
