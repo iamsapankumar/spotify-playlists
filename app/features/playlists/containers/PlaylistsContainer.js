@@ -7,13 +7,31 @@ import AuthContext from '../../../core/auth/AuthContext';
 import SpotifyServices from '../../../core/playlists/services.js/SpotifyService';
 import Playlist from '../components/List/Playlist';
 import * as Vars from '../../../shared/Vars/Vars';
+import Input from '../components/Input/Input';
 
 class SpotifyContainerUnplugged extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchText: '',
+    };
+  }
+
+  changeText = (searchText) => {
+    this.setState({ searchText });
+  }
+
   componentDidUpdate(prevProps) {
     const { isAuthenticated, rehydrated } = this.props;
     if (prevProps.isAuthenticated !== isAuthenticated && isAuthenticated && rehydrated) {
       this.props.fetchPlaylists();
     }
+  }
+
+  searchPlaylists = () => {
+    const { searchText } = this.state;
+    const { fetchPlaylists } = this.props;
+    fetchPlaylists(searchText);
   }
 
   navigateToPlaylistDetail = (details) => {
@@ -25,6 +43,7 @@ class SpotifyContainerUnplugged extends Component {
     const { playlists, loading } = this.props;
     return (
       <>
+        <Input text={this.changeText} onPress={this.searchPlaylists} />
         {loading && <ActivityIndicator color={Vars.themeColors.main} size="large" style={{ paddingTop: 30 }} />}
         <Playlist playlistData={playlists} onPress={this.navigateToPlaylistDetail} />
       </>

@@ -52,11 +52,13 @@ export default class SpotifyServices extends Component {
     return token;
   };
 
-  fetchPlaylists = async () => {
+  fetchPlaylists = async (param) => {
     const token = await AsyncStorage.getItem('token');
     this.setState({ loading: true });
+    let keyword = param;
+    keyword = param ? keyword : 'rock classics';
     try {
-      const url = `${Config.spotifyUrl.playlists}v1/search?q=rap&&market=from_token&type=playlist`;
+      const url = `${Config.spotifyUrl.playlists}v1/search?q=${keyword}&&market=from_token&type=playlist`;
       const results = await Axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
