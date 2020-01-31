@@ -24,7 +24,6 @@ class AuthProvider extends React.Component {
 
   componentDidMount = async () => {
     this.rehydrateAuthState();
-    // this.logout();
   }
 
   rehydrateAuthState = async () => {
@@ -32,6 +31,7 @@ class AuthProvider extends React.Component {
     const tokenDate = await AsyncStorage.getItem(TOKEN_DATE);
 
     this.isTokenValid({ token, tokenDate });
+    return true;
   }
 
   isTokenValid = ({ token, tokenDate }) => {
@@ -47,9 +47,10 @@ class AuthProvider extends React.Component {
     const now = moment().format('X');
     if ((now - tokenDate) > 3600) {
       this.setState({ isAuthenticated: false, rehydrated: true });
-    } else {
-      this.setState({ isAuthenticated: true, rehydrated: true, token });
+      return false;
     }
+    this.setState({ isAuthenticated: true, rehydrated: true, token });
+
     return true;
   }
 

@@ -2,8 +2,8 @@
 import 'react-native';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
+import moment from 'moment';
 import AuthProvider from './AuthProvider';
-
 
 describe('AuthProvider', () => {
   describe('Rendering', () => {
@@ -22,7 +22,8 @@ describe('AuthProvider', () => {
     });
     test('authenticate function', async () => {
       const wrapper = Enzyme.shallow(<AuthProvider />);
-      return wrapper.instance().authenticate({ token: '', tokenDate: '' })
+      const authenticate = wrapper.instance().authenticate({ token: '', tokenDate: '' });
+      return authenticate
         .then(
           (data) => expect(data).toEqual(true),
         );
@@ -32,10 +33,25 @@ describe('AuthProvider', () => {
       const isValidFunction = wrapper.instance().isTokenValid({ token: '', tokenDate: '' });
       expect(isValidFunction).toEqual(false);
     });
-    test('is token valid returning true when having a value', async () => {
+    test('is token valid in the range of date?', async () => {
       const wrapper = Enzyme.shallow(<AuthProvider />);
-      const isValidFunction = wrapper.instance().isTokenValid({ token: '3214123', tokenDate: '314123412' });
+      const now = moment().format('X');
+      const isValidFunction = wrapper.instance().isTokenValid({ token: '3214123', tokenDate: now });
       expect(isValidFunction).toEqual(true);
+    });
+    test('is token out of date?', async () => {
+      const wrapper = Enzyme.shallow(<AuthProvider />);
+      const now = moment().format('X');
+      const isValidFunction = wrapper.instance().isTokenValid({ token: '3214123', tokenDate: now - 3601 });
+      expect(isValidFunction).toEqual(false);
+    });
+    test('is rehydrating?', async () => {
+      const wrapper = Enzyme.shallow(<AuthProvider />);
+      const isValidFunction = wrapper.instance().rehydrateAuthState();
+      return isValidFunction
+        .then(
+          (data) => expect(data).toEqual(true),
+        );
     });
   });
 });

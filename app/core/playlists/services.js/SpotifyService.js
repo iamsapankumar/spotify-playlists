@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
 import { AsyncStorage } from 'react-native';
-import PropTypes from 'prop-types';
 import { AuthSession } from 'expo';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import Axios from 'axios';
 import * as Config from '../../../config/spotify.config';
@@ -52,11 +52,11 @@ export default class SpotifyServices extends Component {
     return token;
   };
 
-  fetchPlaylists = async (param) => {
-    const token = await AsyncStorage.getItem('token');
+  fetchPlaylists = async (searchParam) => {
     this.setState({ loading: true });
-    let keyword = param;
-    keyword = param ? keyword : 'rock classics';
+    const token = await AsyncStorage.getItem('token');
+    let keyword = searchParam;
+    keyword = searchParam ? keyword : 'rock classics';
     try {
       const url = `${Config.spotifyUrl.playlists}v1/search?q=${keyword}&&market=from_token&type=playlist`;
       const results = await Axios.get(url, {
